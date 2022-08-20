@@ -1,0 +1,25 @@
+service: symfonyappone-bref
+
+provider:
+    name: aws
+    region: ap-south-1
+    runtime: provided.al2
+
+plugins:
+    - ./vendor/bref/bref
+
+functions:
+    symwebapp:
+        handler: app/public/index.php
+        description: ''
+        timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+        layers:
+            - ${bref:layer.php-81-fpm}
+        events:
+            - http: 'ANY /'
+
+# Exclude files from deployment
+package:
+    patterns:
+        - '!node_modules/**'
+        - '!tests/**'
